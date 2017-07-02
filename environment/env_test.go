@@ -14,7 +14,7 @@ func TestNewProxyCreatedByEnvVariables(t *testing.T) {
 	env := environment.New()
 
 	if env.Proxy.HTTP != "FOO" {
-		t.Error("HTTP_PROXY flag not parsed!")
+		t.Error("HTTP_PROXY env value not found!")
 	}
 
 	if env.Proxy.HTTPS != "BAZ" {
@@ -30,7 +30,7 @@ func TestNewProxyLowerCasedEnvVariables(t *testing.T) {
 	env := environment.New()
 
 	if env.Proxy.HTTP != "FOO" {
-		t.Error("HTTP_PROXY flag not parsed!")
+		t.Error("HTTP_PROXY env value not found!")
 	}
 
 	if env.Proxy.HTTPS != "BAZ" {
@@ -47,11 +47,22 @@ func TestNewProxyMissingHTTPSProxy(t *testing.T) {
 	env := environment.New()
 
 	if env.Proxy.HTTP != "FOO" {
-		t.Error("HTTP_PROXY flag not parsed!")
+		t.Error("HTTP_PROXY env value not found!")
 	}
 
 	if env.Proxy.HTTPS != "FOO" {
 		t.Error("https proxy env value not found!")
+	}
+
+}
+
+func TestNewHostIsReturned(t *testing.T) {
+	defer setEnvForTest(t, "HOST", "FOO")()
+
+	env := environment.New()
+
+	if env.Host != "FOO" {
+		t.Error("HOST env value not found!")
 	}
 
 }
