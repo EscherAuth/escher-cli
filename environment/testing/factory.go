@@ -7,7 +7,8 @@ import (
 
 func SetEnvForTheTest(t testing.TB, key, value string) func() {
 
-	orgEnvValue := os.Getenv(key)
+	orgEnvValue, envKeyWasSetBeforeTheTest := os.LookupEnv(key)
+
 	err := os.Setenv(key, value)
 
 	if err != nil {
@@ -15,11 +16,18 @@ func SetEnvForTheTest(t testing.TB, key, value string) func() {
 	}
 
 	return func() {
-		err := os.Setenv(key, orgEnvValue)
+
+		var err error
+		if envKeyWasSetBeforeTheTest {
+			err = os.Setenv(key, orgEnvValue)
+		} else {
+			err = os.Unsetenv(key)
+		}
 
 		if err != nil {
 			t.Fatal(err)
 		}
+
 	}
 
 }
