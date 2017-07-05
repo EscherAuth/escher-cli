@@ -5,16 +5,16 @@ import (
 	"strings"
 )
 
-func fetchEnv(key string) string {
-	value := os.Getenv(key)
+func fetchEnv(key string) (value string, found bool) {
+	value, found = os.LookupEnv(key)
 
-	if value == "" {
-		value = os.Getenv(strings.ToUpper(key))
+	if !found {
+		value, found = os.LookupEnv(strings.ToUpper(key))
 	}
 
-	if value == "" {
-		value = os.Getenv(strings.ToLower(key))
+	if !found {
+		value, found = os.LookupEnv(strings.ToLower(key))
 	}
 
-	return value
+	return
 }

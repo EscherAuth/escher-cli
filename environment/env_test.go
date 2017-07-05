@@ -7,66 +7,6 @@ import (
 	. "github.com/EscherAuth/escher-cli/environment/testing"
 )
 
-func TestNewProxyCreatedByEnvVariables(t *testing.T) {
-	defer SetEnvForTheTest(t, "HTTP_PROXY", "FOO")()
-	defer SetEnvForTheTest(t, "HTTPS_PROXY", "BAZ")()
-
-	env := environment.New()
-
-	if env.Proxy.HTTP != "FOO" {
-		t.Error("HTTP_PROXY env value not found!")
-	}
-
-	if env.Proxy.HTTPS != "BAZ" {
-		t.Error("https proxy env value not found!")
-	}
-
-}
-
-func TestNewProxyLowerCasedEnvVariables(t *testing.T) {
-	defer SetEnvForTheTest(t, "http_proxy", "FOO")()
-	defer SetEnvForTheTest(t, "https_proxy", "BAZ")()
-
-	env := environment.New()
-
-	if env.Proxy.HTTP != "FOO" {
-		t.Error("HTTP_PROXY env value not found!")
-	}
-
-	if env.Proxy.HTTPS != "BAZ" {
-		t.Error("https proxy env value not found!")
-	}
-
-}
-
-func TestNewProxyMissingHTTPSProxy(t *testing.T) {
-
-	defer SetEnvForTheTest(t, "http_proxy", "FOO")()
-	defer SetEnvForTheTest(t, "https_proxy", "")()
-
-	env := environment.New()
-
-	if env.Proxy.HTTP != "FOO" {
-		t.Error("HTTP_PROXY env value not found!")
-	}
-
-	if env.Proxy.HTTPS != "FOO" {
-		t.Error("https proxy env value not found!")
-	}
-
-}
-
-func TestNewHostIsReturned(t *testing.T) {
-	defer SetEnvForTheTest(t, "HOST", "FOO")()
-
-	env := environment.New()
-
-	if env.Host != "FOO" {
-		t.Error("HOST env value not found!")
-	}
-
-}
-
 func TestEnvForChildCommandNoReplaceRequested(t *testing.T) {
 	defer SetEnvForTheTest(t, "HOST", "FOO")()
 
@@ -110,6 +50,37 @@ func TestEnvForChildCommandChangeMissingFromTheCurrentEnv(t *testing.T) {
 	var found bool
 	for _, keyValuePair := range envKeyValuePairs {
 		if keyValuePair == "HOST=BAZ" {
+			found = true
+		}
+	}
+
+	if !found {
+		t.Fatal("env not set for the given replacement")
+	}
+
+}
+
+func TestEnvForChildCommandOnEnvInstanceIfProxyGivenEnvWillBeSet(t *testing.T) {
+	// defer SetEnvForTheTest(t, "PORT", "1024")()
+
+	env := environment.New()
+	envKeyValuePairs, err := env.EnvForChildCommand()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	port, missing := env.Port.FindOpenAsString()
+
+	if missing != nil {
+		t.Fatal(missing)
+	}
+
+	expectedEnvKeyPair := "PORT=" + port
+
+	var found bool
+	for _, keyValuePair := range envKeyValuePairs {
+		if keyValuePair == expectedEnvKeyPair {
 			found = true
 		}
 	}

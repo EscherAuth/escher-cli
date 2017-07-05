@@ -1,23 +1,17 @@
 package environment
 
-type Proxy struct {
-	HTTP  string `env:"HTTP_PROXY"`
-	HTTPS string `env:"HTTPS_PROXY"`
-}
+type Proxy struct{}
 
-func NewProxy() Proxy {
-	return Proxy{
-		HTTP:  fetchEnv("HTTP_PROXY"),
-		HTTPS: httpsProxyEnv(),
-	}
-}
-
-func httpsProxyEnv() string {
-	httpsProxy := fetchEnv("HTTPS_PROXY")
-
-	if httpsProxy != "" {
-		return httpsProxy
-	}
-
+func (p Proxy) HTTP() (string, bool) {
 	return fetchEnv("HTTP_PROXY")
+}
+
+func (p Proxy) HTTPS() (value string, found bool) {
+	value, found = fetchEnv("HTTPS_PROXY")
+
+	if !found {
+		value, found = p.HTTP()
+	}
+
+	return
 }

@@ -3,6 +3,8 @@ package runner
 import (
 	"io"
 	"os/exec"
+
+	"github.com/EscherAuth/escher-cli/environment"
 )
 
 type Runner interface {
@@ -12,21 +14,26 @@ type Runner interface {
 
 type runner struct {
 	command *exec.Cmd
-	env     map[string]string
+	env     environment.Environment
 }
 
-func New(command *exec.Cmd, childProcessEnv map[string]string) Runner {
-	return &runner{command: command, env: childProcessEnv}
+func New(command *exec.Cmd, env environment.Environment) Runner {
+	return &runner{command: command, env: env}
 }
 
 // Handle signals
 // go func() { r.command.Process.Signal(<-sp.signal) }()
 
 func (r *runner) Start(stdout, stderr io.Writer) error {
+	var err error
 
-	r.setEnvForCommand()
+	err = r.setEnvForCommand()
 
-	err := r.setOutputs(stdout, stderr)
+	if err != nil {
+		return err
+	}
+
+	err = r.setOutputs(stdout, stderr)
 
 	if err != nil {
 		return err
@@ -39,7 +46,6 @@ func (r *runner) Start(stdout, stderr io.Writer) error {
 	}
 
 	return nil
-
 }
 
 func (r *runner) Wait() error {

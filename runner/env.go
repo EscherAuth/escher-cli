@@ -1,9 +1,13 @@
 package runner
 
-import (
-	"github.com/EscherAuth/escher-cli/environment"
-)
+func (r *runner) setEnvForCommand() error {
+	env, err := r.env.EnvForChildCommand()
 
-func (r *runner) setEnvForCommand() {
-	r.command.Env = environment.EnvForChildCommand(r.env)
+	if err != nil {
+		return err
+	}
+
+	r.command.Env = env
+
+	return nil
 }
