@@ -10,7 +10,7 @@ import (
 func TestEnvForChildCommandNoReplaceRequested(t *testing.T) {
 	defer SetEnvForTheTest(t, "HOST", "FOO")()
 
-	envKeyValuePairs := environment.EnvForChildCommand(map[string]string{})
+	envKeyValuePairs := environment.New().EnvForChildCommand(map[string]string{})
 
 	var found bool
 	for _, keyValuePair := range envKeyValuePairs {
@@ -28,7 +28,7 @@ func TestEnvForChildCommandNoReplaceRequested(t *testing.T) {
 func TestEnvForChildCommandChangePresentInTheCurrentEnv(t *testing.T) {
 	defer SetEnvForTheTest(t, "HOST", "FOO")()
 
-	envKeyValuePairs := environment.EnvForChildCommand(map[string]string{"HOST": "BAZ"})
+	envKeyValuePairs := environment.New().EnvForChildCommand(map[string]string{"HOST": "BAZ"})
 
 	var found bool
 	for _, keyValuePair := range envKeyValuePairs {
@@ -45,7 +45,7 @@ func TestEnvForChildCommandChangePresentInTheCurrentEnv(t *testing.T) {
 
 func TestEnvForChildCommandChangeMissingFromTheCurrentEnv(t *testing.T) {
 
-	envKeyValuePairs := environment.EnvForChildCommand(map[string]string{"HOST": "BAZ"})
+	envKeyValuePairs := environment.New().EnvForChildCommand(map[string]string{"HOST": "BAZ"})
 
 	var found bool
 	for _, keyValuePair := range envKeyValuePairs {
@@ -61,25 +61,19 @@ func TestEnvForChildCommandChangeMissingFromTheCurrentEnv(t *testing.T) {
 }
 
 func TestEnvForChildCommandOnEnvInstanceIfProxyGivenEnvWillBeSet(t *testing.T) {
-	// defer SetEnvForTheTest(t, "PORT", "1024")()
 
 	env := environment.New()
-	envKeyValuePairs, err := env.EnvForChildCommand()
+
+	changes, err := env.EnvDifferencesForSubProcess()
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	port, missing := env.Port.FindOpenAsString()
-
-	if missing != nil {
-		t.Fatal(missing)
-	}
-
-	expectedEnvKeyPair := "PORT=" + port
+	expectedEnvKeyPair := "PORT=" + changes["PORT"]
 
 	var found bool
-	for _, keyValuePair := range envKeyValuePairs {
+	for _, keyValuePair := range env.EnvForChildCommand(changes) {
 		if keyValuePair == expectedEnvKeyPair {
 			found = true
 		}

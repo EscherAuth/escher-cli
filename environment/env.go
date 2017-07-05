@@ -6,7 +6,9 @@ import (
 	"strings"
 )
 
-func EnvForChildCommand(replaces map[string]string) []string {
+type EnvChanges map[string]string
+
+func (e Environment) EnvForChildCommand(replaces EnvChanges) []string {
 	var env []string
 
 	for _, keyValuePair := range os.Environ() {
@@ -26,8 +28,8 @@ func EnvForChildCommand(replaces map[string]string) []string {
 	return env
 }
 
-func (e Environment) EnvForChildCommand() ([]string, error) {
-	replaces := map[string]string{}
+func (e Environment) EnvDifferencesForSubProcess() (EnvChanges, error) {
+	changes := make(EnvChanges)
 
 	port, err := e.Port.FindOpenAsString()
 
@@ -35,7 +37,8 @@ func (e Environment) EnvForChildCommand() ([]string, error) {
 		return nil, err
 	}
 
-	replaces["PORT"] = port
+	changes["PORT"] = port
 
-	return EnvForChildCommand(replaces), nil
+	return changes, nil
+
 }

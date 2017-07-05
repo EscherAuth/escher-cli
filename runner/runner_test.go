@@ -7,11 +7,9 @@ import (
 	"testing"
 
 	"github.com/EscherAuth/escher-cli/environment"
-	. "github.com/EscherAuth/escher-cli/environment/testing"
 )
 
-func TestRunnerSetAnOpenPortForTheCommandIfPortIsAlreadyDefinedForTheCurrentProcess(t *testing.T) {
-	defer SetEnvForTheTest(t, "PORT", "1234")()
+func TestRunnerSetPortForTheNewEnv(t *testing.T) {
 
 	cmd := exec.Command("env")
 	env := environment.New()

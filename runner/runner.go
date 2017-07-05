@@ -13,8 +13,9 @@ type Runner interface {
 }
 
 type runner struct {
-	command *exec.Cmd
-	env     environment.Environment
+	command    *exec.Cmd
+	envChanges environment.EnvChanges
+	env        environment.Environment
 }
 
 func New(command *exec.Cmd, env environment.Environment) Runner {

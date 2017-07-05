@@ -1,13 +1,14 @@
 package runner
 
 func (r *runner) setEnvForCommand() error {
-	env, err := r.env.EnvForChildCommand()
+	envChanges, err := r.env.EnvDifferencesForSubProcess()
 
 	if err != nil {
 		return err
 	}
 
-	r.command.Env = env
+	r.envChanges = envChanges
+	r.command.Env = r.env.EnvForChildCommand(r.envChanges)
 
 	return nil
 }
