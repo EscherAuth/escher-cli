@@ -10,16 +10,21 @@ import (
 type Runner interface {
 	Start(stdout, stderr io.Writer) error
 	Wait() error
+	EnvDiff() environment.EnvDiff
 }
 
 type runner struct {
-	command    *exec.Cmd
-	envChanges environment.EnvChanges
-	env        environment.Environment
+	command *exec.Cmd
+	env     environment.Environment
+	diff    environment.EnvDiff
 }
 
 func New(command *exec.Cmd, env environment.Environment) Runner {
 	return &runner{command: command, env: env}
+}
+
+func (r runner) EnvDiff() environment.EnvDiff {
+	return r.diff
 }
 
 // Handle signals

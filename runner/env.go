@@ -7,8 +7,8 @@ func (r *runner) setEnvForCommand() error {
 		return err
 	}
 
-	r.envChanges = envChanges
-	r.command.Env = r.env.EnvForChildCommand(r.envChanges)
+	r.diff = envChanges
+	r.command.Env = r.env.EnvForChildCommand(r.diff)
 
 	return nil
 }

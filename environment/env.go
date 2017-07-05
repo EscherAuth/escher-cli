@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-type EnvChanges map[string]string
+type EnvDiff map[string]string
 
-func (e Environment) EnvForChildCommand(replaces EnvChanges) []string {
+func (e Environment) EnvForChildCommand(replaces EnvDiff) []string {
 	var env []string
 
 	for _, keyValuePair := range os.Environ() {
@@ -28,8 +28,8 @@ func (e Environment) EnvForChildCommand(replaces EnvChanges) []string {
 	return env
 }
 
-func (e Environment) EnvDifferencesForSubProcess() (EnvChanges, error) {
-	changes := make(EnvChanges)
+func (e Environment) EnvDifferencesForSubProcess() (EnvDiff, error) {
+	changes := make(EnvDiff)
 
 	port, err := e.Port.FindOpenAsString()
 
