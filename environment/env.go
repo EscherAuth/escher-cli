@@ -31,10 +31,20 @@ func (e Environment) EnvForChildCommand(replaces EnvDiff) []string {
 func (e Environment) EnvDifferencesForSubProcess() (EnvDiff, error) {
 	changes := make(EnvDiff)
 
-	port, err := e.Port.FindOpenAsString()
+	sourcePort, sourcePortIsGiven := e.Port.Source()
 
-	if err != nil {
-		return nil, err
+	var port string
+
+	for {
+		port = RequestPortFromOperationSystem()
+
+		if !sourcePortIsGiven {
+			break
+		}
+
+		if port != sourcePort {
+			break
+		}
 	}
 
 	changes["PORT"] = port
