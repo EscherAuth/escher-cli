@@ -5,26 +5,36 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strconv"
 	"strings"
 )
 
 type Port struct{}
 
-func (p Port) Source() (string, bool) {
-	return fetchEnv("PORT")
+func (p Port) Source() (int, bool) {
+	portAsString, isGiven := fetchEnv("PORT")
+
+	if !isGiven {
+		return 0, isGiven
+	}
+
+	port, err := strconv.Atoi(portAsString)
+	return port, err == nil
 }
 
 //
 // 1025-65535
 var NoOpenPortFoundError = errors.New("no open port found")
 
-func RequestPortFromOperationSystem() string {
+func RequestPortFromOperationSystem() int {
 	l, err := net.Listen("tcp", ":0")
 	doWhatCanBeDoneWhenNoPortAvailableInAWebDevelopmentEnvironment(err)
 	defer l.Close()
 	address := l.Addr().String()
 	parts := strings.Split(address, ":")
-	return parts[len(parts)-1]
+	port, err := strconv.Atoi(parts[len(parts)-1])
+	doWhatCanBeDoneWhenNoPortAvailableInAWebDevelopmentEnvironment(err)
+	return port
 }
 
 func doWhatCanBeDoneWhenNoPortAvailableInAWebDevelopmentEnvironment(err error) {
@@ -35,7 +45,7 @@ func doWhatCanBeDoneWhenNoPortAvailableInAWebDevelopmentEnvironment(err error) {
 	}
 }
 
-func (p Port) FindOpenAsString() (port string) {
+func (p Port) FindOpenAsString() (port int) {
 	restrictedPortFromUse, sourcePortIsGiven := p.Source()
 
 	for {

@@ -3,6 +3,7 @@ package environment
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -33,7 +34,7 @@ func (e Environment) EnvDifferencesForSubProcess() (EnvDiff, error) {
 
 	sourcePort, sourcePortIsGiven := e.Port.Source()
 
-	var port string
+	var port int
 
 	for {
 		port = RequestPortFromOperationSystem()
@@ -47,7 +48,7 @@ func (e Environment) EnvDifferencesForSubProcess() (EnvDiff, error) {
 		}
 	}
 
-	changes["PORT"] = port
+	changes["PORT"] = strconv.Itoa(port)
 
 	return changes, nil
 

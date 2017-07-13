@@ -18,8 +18,7 @@ func TestRunnerSetPortForTheNewEnv(t *testing.T) {
 	r := runner.New(cmd, env)
 	stdout, _ := runAndWait(t, r)
 
-	portAsString, _ := env.Port.FindOpenAsString()
-	rgx := regexp.MustCompile(regexp.QuoteMeta("PORT=" + portAsString))
+	rgx := regexp.MustCompile(regexp.QuoteMeta("PORT=" + r.EnvDiff()["PORT"]))
 
 	if !rgx.Match(stdout) {
 		t.Fatal("execution failed with modified env")
@@ -27,24 +26,17 @@ func TestRunnerSetPortForTheNewEnv(t *testing.T) {
 
 }
 
-func TestRunnerAccessChangesForTheCcurrentlyRunningProcess(t *testing.T) {
+func TestRunnerAccessChangesForTheCurrentlyRunningProcess(t *testing.T) {
 
 	cmd := exec.Command("echo", "hy")
 	env := environment.New()
 	r := runner.New(cmd, env)
 	runAndWait(t, r)
 
-	diff, _ := env.EnvDifferencesForSubProcess()
-	processEnvDiff := r.EnvDiff()
+	envDiff := r.EnvDiff()
 
-	portGivenToProcess, ok := processEnvDiff["PORT"]
-
-	if !ok {
-		t.Fatal("Missing Port value about the changes")
-	}
-
-	if portGivenToProcess != diff["PORT"] {
-		t.Fatal("expected port is different from the found one")
+	if _, ok := envDiff["PORT"]; !ok {
+		t.Fatal("expected port to be set in the env")
 	}
 
 }

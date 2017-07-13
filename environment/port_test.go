@@ -1,7 +1,6 @@
 package environment_test
 
 import (
-	"net"
 	"strconv"
 	"testing"
 
@@ -20,8 +19,8 @@ func TestSourcePortSetAndFound(t *testing.T) {
 		t.Fatal("expected port value not found")
 	}
 
-	if port != "3000" {
-		t.Fatal("not expected port value: " + port)
+	if port != 3000 {
+		t.Fatal("not expected port value: " + strconv.Itoa(port))
 	}
 
 }
@@ -41,12 +40,12 @@ func TestSourcePortNotSetInTheEnv(t *testing.T) {
 func TestRequestPortFromOperationSystem(t *testing.T) {
 
 	samplingTimes := 10
-	ports := make([]string, 0, samplingTimes)
+	ports := make([]int, 0, samplingTimes)
 
 testTimes:
 	for i := 0; i < samplingTimes; i++ {
 		port := environment.RequestPortFromOperationSystem()
-		fatalIfPortIsAlreadyInUse(t, port)
+		FatalIfPortIsAlreadyInUse(t, port)
 
 		for _, storedPort := range ports {
 			if storedPort == port {
@@ -66,50 +65,20 @@ testTimes:
 func TestFindOpenAsStringPortDefaultStartingNotTaken(t *testing.T) {
 	env := environment.New()
 	port := env.Port.FindOpenAsString()
-	fatalIfPortIsAlreadyInUse(t, port)
+	FatalIfPortIsAlreadyInUse(t, port)
 }
 
 func TestFindOpenAsStringPortDefaultStartingTakenByTheHTTPPort(t *testing.T) {
-
-	takenPort := incrementPortNumberBy(t, environment.RequestPortFromOperationSystem(), 5)
-	defer SetEnvForTheTest(t, "PORT", takenPort)()
+	takenPort := environment.RequestPortFromOperationSystem() + 2
+	defer SetEnvForTheTest(t, "PORT", strconv.Itoa(takenPort))()
 	env := environment.New()
 
 	for i := 0; i < 100; i++ {
 		port := env.Port.FindOpenAsString()
-		fatalIfPortIsAlreadyInUse(t, port)
+		FatalIfPortIsAlreadyInUse(t, port)
 		if port == takenPort {
 			t.Fatal("PORT env variable value is restricted!")
 		}
 	}
 
-}
-
-// HELPERS
-
-func fatalIfPortIsAlreadyInUse(t testing.TB, port string) {
-
-	_, err := strconv.Atoi(port)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	conn, err := net.Dial("tcp", ":"+port)
-
-	if err == nil {
-		conn.Close()
-		t.Fatal("port shouldn't listen!")
-	}
-
-}
-
-func incrementPortNumberBy(t testing.TB, port string, numberToAdd int) string {
-	num, err := strconv.Atoi(port)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	return strconv.Itoa(num + numberToAdd)
 }
