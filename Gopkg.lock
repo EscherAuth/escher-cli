@@ -4,12 +4,36 @@
 [[projects]]
   branch = "master"
   name = "github.com/EscherAuth/escher"
-  packages = ["keydb","request"]
-  revision = "17a664d97670c0788d44faa0e8e9c60c9b9ee5c7"
+  packages = ["config","keydb","request","signer","utils","validator"]
+  revision = "a0f68bfa17b9c5f5512903a7c4fe2091ec39a093"
+
+[[projects]]
+  name = "github.com/PuerkitoBio/purell"
+  packages = ["."]
+  revision = "0bcb03f4b4d0a9428594752bd2a3b9aa0a9d4bd4"
+  version = "v1.1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/PuerkitoBio/urlesc"
+  packages = ["."]
+  revision = "bbf7a2afc14f93e1e0a5c06df524fbd75e5031e5"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["idna"]
+  revision = "054b33e6527139ad5b1ec2f6232c3b175bd9a30c"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/text"
+  packages = ["internal/gen","internal/triegen","internal/ucd","secure/bidirule","transform","unicode/bidi","unicode/cldr","unicode/norm","unicode/rangetable","width"]
+  revision = "cfdf022e86b4ecfb646e1efbd7db175dd623a8fa"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "dae94af2702957bd7270efc2e5b21ab21869339e66b91b48665a51d5f50de7fd"
+  inputs-digest = "d07128f2dee1563168cffae10b86651f21f72fb8ca094bfc41928d214e0ccb65"
   solver-name = "gps-cdcl"
   solver-version = 1
