@@ -1,9 +1,8 @@
 package reverseproxy
 
 import (
+	"net/http"
 	"net/http/httputil"
-	"net/url"
-	"strconv"
 
 	"github.com/EscherAuth/escher/keydb"
 	"github.com/EscherAuth/escher/validator"
@@ -11,6 +10,7 @@ import (
 
 type ReverseProxy interface {
 	ListenAndServeOnPort(port int) error
+	HandleWithValidation(http.ResponseWriter, *http.Request)
 }
 
 type reverseProxy struct {
@@ -23,13 +23,6 @@ func New(backendPort int, validator validator.Validator, keyDB keydb.KeyDB) Reve
 	return &reverseProxy{
 		keyDB:        keyDB,
 		validator:    validator,
-		reverseProxy: httputil.NewSingleHostReverseProxy(backendServerURLBy(backendPort)),
+		reverseProxy: httpUtilsReverseProxyBy(backendPort),
 	}
-}
-
-func backendServerURLBy(port int) *url.URL {
-	u := &url.URL{}
-	u.Scheme = "http"
-	u.Host = ":" + strconv.Itoa(port)
-	return u
 }
