@@ -39,6 +39,12 @@ func (r *runner) Start(stdout, stderr io.Writer) error {
 		return err
 	}
 
+	err = r.setPortInCommandArgs()
+
+	if err != nil {
+		return err
+	}
+
 	err = r.setOutputs(stdout, stderr)
 
 	if err != nil {
