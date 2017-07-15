@@ -9,7 +9,8 @@ import (
 
 type EnvDiff map[string]string
 
-func (e Environment) EnvForChildCommand(replaces EnvDiff) []string {
+func (e *Environment) EnvForChildCommand(replaces EnvDiff) []string {
+
 	var env []string
 
 	for _, keyValuePair := range os.Environ() {
@@ -29,27 +30,33 @@ func (e Environment) EnvForChildCommand(replaces EnvDiff) []string {
 	return env
 }
 
-func (e Environment) EnvDifferencesForSubProcess() (EnvDiff, error) {
-	changes := make(EnvDiff)
+func (e *Environment) EnvDifferencesForSubProcess() EnvDiff {
+	if len(e.envDifferencesForSubProcess) == 0 {
 
-	sourcePort, sourcePortIsGiven := e.Port.Source()
+		changes := make(EnvDiff)
 
-	var port int
+		sourcePort, sourcePortIsGiven := e.Port.Source()
 
-	for {
-		port = RequestPortFromOperationSystem()
+		var port int
 
-		if !sourcePortIsGiven {
-			break
+		for {
+			port = RequestPortFromOperationSystem()
+
+			if !sourcePortIsGiven {
+				break
+			}
+
+			if port != sourcePort {
+				break
+			}
 		}
 
-		if port != sourcePort {
-			break
-		}
+		changes["PORT"] = strconv.Itoa(port)
+
+		e.envDifferencesForSubProcess = changes
+
 	}
 
-	changes["PORT"] = strconv.Itoa(port)
-
-	return changes, nil
+	return e.envDifferencesForSubProcess
 
 }

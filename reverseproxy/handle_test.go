@@ -23,11 +23,7 @@ var backendServerPort int
 
 func init() {
 
-	diff, err := environment.New().EnvDifferencesForSubProcess()
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	diff := environment.New().EnvDifferencesForSubProcess()
 
 	openPortNumber, err := strconv.Atoi(diff["PORT"])
 

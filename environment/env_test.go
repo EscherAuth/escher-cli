@@ -64,11 +64,7 @@ func TestEnvForChildCommandOnEnvInstanceIfProxyGivenEnvWillBeSet(t *testing.T) {
 
 	env := environment.New()
 
-	changes, err := env.EnvDifferencesForSubProcess()
-
-	if err != nil {
-		t.Fatal(err)
-	}
+	changes := env.EnvDifferencesForSubProcess()
 
 	expectedEnvKeyPair := "PORT=" + changes["PORT"]
 
@@ -81,6 +77,19 @@ func TestEnvForChildCommandOnEnvInstanceIfProxyGivenEnvWillBeSet(t *testing.T) {
 
 	if !found {
 		t.Fatal("env not set for the given replacement")
+	}
+
+}
+
+func TestEnvForChildCommandIsCached(t *testing.T) {
+
+	env := environment.New()
+
+	changes1 := env.EnvDifferencesForSubProcess()
+	changes2 := env.EnvDifferencesForSubProcess()
+
+	if changes1["PORT"] != changes2["PORT"] {
+		t.Fatal("changes should be matching because caching")
 	}
 
 }

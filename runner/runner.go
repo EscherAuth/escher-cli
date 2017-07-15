@@ -15,16 +15,15 @@ type Runner interface {
 
 type runner struct {
 	command *exec.Cmd
-	env     environment.Environment
-	diff    environment.EnvDiff
+	env     *environment.Environment
 }
 
-func New(command *exec.Cmd, env environment.Environment) Runner {
+func New(command *exec.Cmd, env *environment.Environment) Runner {
 	return &runner{command: command, env: env}
 }
 
 func (r runner) EnvDiff() environment.EnvDiff {
-	return r.diff
+	return r.env.EnvDifferencesForSubProcess()
 }
 
 // Handle signals

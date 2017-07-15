@@ -23,7 +23,7 @@ func (r *runner) setPortInCommandArgs() error {
 	}
 
 	for _, arg := range r.command.Args {
-		transformedArgs = append(transformedArgs, rgx.ReplaceAllLiteralString(arg, r.diff["PORT"]))
+		transformedArgs = append(transformedArgs, rgx.ReplaceAllLiteralString(arg, r.env.EnvDifferencesForSubProcess()["PORT"]))
 	}
 
 	r.command.Args = transformedArgs
