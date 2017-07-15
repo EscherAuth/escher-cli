@@ -9,27 +9,6 @@ import (
 
 type EnvDiff map[string]string
 
-func (e *Environment) EnvForChildCommand(replaces EnvDiff) []string {
-
-	var env []string
-
-	for _, keyValuePair := range os.Environ() {
-
-		key := strings.Split(keyValuePair, "=")[0]
-
-		if _, ok := replaces[key]; !ok {
-			env = append(env, keyValuePair)
-		}
-
-	}
-
-	for k, v := range replaces {
-		env = append(env, fmt.Sprintf("%s=%s", k, v))
-	}
-
-	return env
-}
-
 func (e *Environment) EnvDifferencesForSubProcess() EnvDiff {
 	if len(e.envDifferencesForSubProcess) == 0 {
 
@@ -59,4 +38,25 @@ func (e *Environment) EnvDifferencesForSubProcess() EnvDiff {
 
 	return e.envDifferencesForSubProcess
 
+}
+
+func (e *Environment) EnvForChildCommand(replaces EnvDiff) []string {
+
+	var env []string
+
+	for _, keyValuePair := range os.Environ() {
+
+		key := strings.Split(keyValuePair, "=")[0]
+
+		if _, ok := replaces[key]; !ok {
+			env = append(env, keyValuePair)
+		}
+
+	}
+
+	for k, v := range replaces {
+		env = append(env, fmt.Sprintf("%s=%s", k, v))
+	}
+
+	return env
 }
