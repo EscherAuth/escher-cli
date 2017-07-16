@@ -9,8 +9,8 @@ import (
 )
 
 type ReverseProxy interface {
-	ListenAndServeOnPort(port int) error
-	HandleWithValidation(http.ResponseWriter, *http.Request)
+	ListenAndServe(port int) error
+	ServeHTTP(http.ResponseWriter, *http.Request)
 }
 
 type reverseProxy struct {

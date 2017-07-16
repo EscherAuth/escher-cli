@@ -50,7 +50,7 @@ func TestHandlingValidRequestForwardedToTheBackend(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	proxy.HandleWithValidation(response, request)
+	proxy.ServeHTTP(response, request)
 
 	actuallyBody, err := ioutil.ReadAll(response.Body)
 
@@ -79,7 +79,7 @@ func TestHandlingValidationErrorRespondedWithoutBotherinTheBackendService(t *tes
 		t.Fatal(err)
 	}
 
-	proxy.HandleWithValidation(response, request)
+	proxy.ServeHTTP(response, request)
 
 	actuallyBody, err := ioutil.ReadAll(response.Body)
 

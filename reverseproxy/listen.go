@@ -5,8 +5,7 @@ import (
 	"strconv"
 )
 
-func (rp *reverseProxy) ListenAndServeOnPort(port int) error {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", rp.HandleWithValidation)
-	return http.ListenAndServe(":"+strconv.Itoa(port), mux)
+// TODO: cover
+func (rp *reverseProxy) ListenAndServe(port int) error {
+	return http.ListenAndServe(":"+strconv.Itoa(port), rp)
 }

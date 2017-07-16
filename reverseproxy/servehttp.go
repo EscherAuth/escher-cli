@@ -6,7 +6,7 @@ import (
 	"github.com/EscherAuth/escher/request"
 )
 
-func (rp *reverseProxy) HandleWithValidation(w http.ResponseWriter, r *http.Request) {
+func (rp *reverseProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	apiKey, err := rp.validator.Validate(request.NewFromHTTPRequest(r), rp.keyDB, nil)
 
