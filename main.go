@@ -2,36 +2,50 @@ package main
 
 import (
 	"log"
+	"os"
+	"os/exec"
 
-	"github.com/EscherAuth/escher-cli/reverseproxy"
-	"github.com/EscherAuth/escher/config"
-	"github.com/EscherAuth/escher/keydb"
-	"github.com/EscherAuth/escher/validator"
+	"github.com/EscherAuth/escher-cli/environment"
 )
 
+func init() {
+	if len(os.Args) == 1 {
+		log.Fatal("no argument given, please provide a command to execute in configured escher environment")
+	}
+}
+
 func main() {
-	rp := reverseproxy.New(4004, NewValidator(), NewKeyDB())
+	shutdownSignals := SubscribeToShutdownSignals()
+	env := environment.New()
 
-	err := rp.ListenAndServeOnPort(4000)
-	if err != nil {
-		log.Fatal(err)
+	StartListenInTheBackgroundWithReverseProxy(env)
+
+	cmd := cmdBy(env)
+	go RunCMD(env, cmd)
+	WaitForShutdown(cmd, shutdownSignals)
+}
+
+func WaitForShutdown(cmd *exec.Cmd, shutdownSignals chan os.Signal) {
+waitCycle:
+	for {
+		select {
+
+		case sig := <-shutdownSignals:
+			err := cmd.Process.Signal(sig)
+
+			if err != nil {
+				log.Println(err)
+			}
+		default:
+
+			if cmd.Process == nil {
+				continue waitCycle
+			}
+
+			if cmd.ProcessState != nil {
+				break waitCycle
+			}
+
+		}
 	}
-}
-
-func NewConfig() config.Config {
-	return config.Config{
-		VendorKey:       "AWS4",
-		AlgoPrefix:      "AWS4",
-		CredentialScope: "us-east-1/host/aws4_request",
-		AuthHeaderName:  "Authorization",
-		DateHeaderName:  "Date",
-	}
-}
-
-func NewKeyDB() keydb.KeyDB {
-	return keydb.NewBySlice([][2]string{[2]string{"AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY"}})
-}
-
-func NewValidator() validator.Validator {
-	return validator.New(NewConfig())
 }
