@@ -22,7 +22,7 @@ func TestRunnerSetPortForTheNewEnv(t *testing.T) {
 	r := runner.New(env, cmd)
 	stdout, _ := runAndWait(t, r)
 
-	rgx := regexp.MustCompile(regexp.QuoteMeta("PORT=" + r.EnvDiff()["PORT"]))
+	rgx := regexp.MustCompile(regexp.QuoteMeta("PORT=" + env.EnvDifferencesForSubProcess()["PORT"]))
 
 	if !rgx.Match(stdout) {
 		t.Fatal("execution failed with modified env")
@@ -37,9 +37,7 @@ func TestRunnerAccessChangesForTheCurrentlyRunningProcess(t *testing.T) {
 	r := runner.New(env, cmd)
 	runAndWait(t, r)
 
-	envDiff := r.EnvDiff()
-
-	if _, ok := envDiff["PORT"]; !ok {
+	if _, ok := env.EnvDifferencesForSubProcess()["PORT"]; !ok {
 		t.Fatal("expected port to be set in the env")
 	}
 
@@ -64,8 +62,8 @@ func TestRunnerWhenParamsIncludeAPORTThatIsTheSameAsInTheCurrentEnvSourcePortTha
 		cmd := exec.Command("echo", cmdParameter)
 		r := runner.New(env, cmd)
 		out, _ := runAndWait(t, r)
-		envDiff := r.EnvDiff()
-		formatted := fmt.Sprintf(format, envDiff["PORT"])
+
+		formatted := fmt.Sprintf(format, env.EnvDifferencesForSubProcess()["PORT"])
 		parts := strings.SplitN(formatted, "%!", 2)
 
 		expected := parts[0]
