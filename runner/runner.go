@@ -18,8 +18,8 @@ type runner struct {
 	env     *environment.Environment
 }
 
-func New(command *exec.Cmd, env *environment.Environment) Runner {
-	return &runner{command: command, env: env}
+func New(env *environment.Environment, command *exec.Cmd) Runner {
+	return &runner{env: env, command: command}
 }
 
 func (r runner) EnvDiff() environment.EnvDiff {
