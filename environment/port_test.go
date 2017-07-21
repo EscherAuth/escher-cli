@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/EscherAuth/escher-cli/environment"
-	. "github.com/EscherAuth/escher-cli/environment/testing"
+	. "github.com/EscherAuth/escher/testing/env"
 )
 
 func TestSourcePortSetAndFound(t *testing.T) {

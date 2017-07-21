@@ -10,7 +10,7 @@ import (
 
 	"github.com/EscherAuth/escher-cli/command"
 	"github.com/EscherAuth/escher-cli/environment"
-	. "github.com/EscherAuth/escher-cli/environment/testing"
+	. "github.com/EscherAuth/escher/testing/env"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -40,15 +40,21 @@ func NewValidator() validator.Validator {
 }
 
 func NewConfig() config.Config {
-	return config.Config{
-		VendorKey:       "AWS4",
-		AlgoPrefix:      "AWS4",
-		CredentialScope: "us-east-1/host/aws4_request",
-		AuthHeaderName:  "Authorization",
-		DateHeaderName:  "Date",
+	c, err := config.NewFromENV()
+
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	return c
 }
 
 func NewKeyDB() keydb.KeyDB {
-	return keydb.NewByKeyValuePair("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+	keyDB, err := keydb.NewFromENV()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return keyDB
 }

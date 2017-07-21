@@ -49,9 +49,7 @@ func setCommandArgs(env *environment.Environment, cmd *exec.Cmd) error {
 		transformedArgs = append(transformedArgs, newArg)
 	}
 
-	fmt.Println(cmd.Args)
 	cmd.Args = transformedArgs
-	fmt.Println(cmd.Args)
 
 	return nil
 }
