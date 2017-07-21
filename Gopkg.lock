@@ -4,8 +4,8 @@
 [[projects]]
   branch = "master"
   name = "github.com/EscherAuth/escher"
-  packages = ["config","keydb","request","signer","utils","validator","validator/mock"]
-  revision = "cdc29b3dedadf175555a9fffaa9acfb892c72608"
+  packages = ["config","keydb","request","signer","testing/env","utils","validator","validator/mock"]
+  revision = "08fe0ee7f811b29f3c73cb8e213c8c1c91a232c7"
 
 [[projects]]
   name = "github.com/PuerkitoBio/purell"
@@ -26,6 +26,12 @@
   version = "v1.1.0"
 
 [[projects]]
+  name = "github.com/elazarl/goproxy"
+  packages = ["."]
+  revision = "0a5b8bdb09049ae4ae68e75437ded0b7a2e324e3"
+  version = "v1.0"
+
+[[projects]]
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
@@ -41,17 +47,17 @@
   branch = "master"
   name = "golang.org/x/net"
   packages = ["idna"]
-  revision = "054b33e6527139ad5b1ec2f6232c3b175bd9a30c"
+  revision = "ab5485076ff3407ad2d02db054635913f017b0ed"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
   packages = ["internal/gen","internal/triegen","internal/ucd","secure/bidirule","transform","unicode/bidi","unicode/cldr","unicode/norm","unicode/rangetable","width"]
-  revision = "cfdf022e86b4ecfb646e1efbd7db175dd623a8fa"
+  revision = "836efe42bb4aa16aaa17b9c155d8813d336ed720"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "185016e12c4db02da124258a6c55e2e71b9d453a9e807687e05c39108735974e"
+  inputs-digest = "704419de6892f96257a59289a00e99b7a4829c78a7d4fed4f14d69521a460eff"
   solver-name = "gps-cdcl"
   solver-version = 1
