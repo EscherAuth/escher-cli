@@ -3,45 +3,8 @@ package environment
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
-
-type EnvDiff map[string]string
-
-func (e *Environment) EnvDifferencesForSubProcess() EnvDiff {
-	if len(e.envDifferencesForSubProcess) == 0 {
-		e.envDifferencesForSubProcess = e.createEnvDifferencesForSubProcess()
-	}
-
-	return e.envDifferencesForSubProcess
-
-}
-
-func (e *Environment) createEnvDifferencesForSubProcess() EnvDiff {
-
-	changes := make(EnvDiff)
-
-	sourcePort, sourcePortIsGiven := e.Port.Source()
-
-	var port int
-
-	for {
-		port = RequestPortFromOperationSystem()
-
-		if !sourcePortIsGiven {
-			break
-		}
-
-		if port != sourcePort {
-			break
-		}
-	}
-
-	changes["PORT"] = strconv.Itoa(port)
-
-	return changes
-}
 
 func (e *Environment) EnvForChildCommand(replaces EnvDiff) []string {
 
