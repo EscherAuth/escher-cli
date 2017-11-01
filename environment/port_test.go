@@ -62,19 +62,19 @@ testTimes:
 
 }
 
-func TestFindOpenAsStringPortDefaultStartingNotTaken(t *testing.T) {
+func TestFindOpenPortDefaultStartingNotTaken(t *testing.T) {
 	env := environment.New()
-	port := env.Port.FindOpenAsString()
+	port := env.Port.FindOpen()
 	FatalIfPortIsAlreadyInUse(t, port)
 }
 
-func TestFindOpenAsStringPortDefaultStartingTakenByTheHTTPPort(t *testing.T) {
+func TestFindOpenPortDefaultStartingTakenByTheHTTPPort(t *testing.T) {
 	takenPort := environment.RequestPortFromOperationSystem() + 2
 	defer SetEnvForTheTest(t, "PORT", strconv.Itoa(takenPort))()
 	env := environment.New()
 
 	for i := 0; i < 100; i++ {
-		port := env.Port.FindOpenAsString()
+		port := env.Port.FindOpen()
 		FatalIfPortIsAlreadyInUse(t, port)
 		if port == takenPort {
 			t.Fatal("PORT env variable value is restricted!")

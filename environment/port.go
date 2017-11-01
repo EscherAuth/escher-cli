@@ -11,6 +11,7 @@ import (
 
 type Port struct{}
 
+// Source is the Port where the Guarded Server originally would expect the incoming Http requests
 func (p Port) Source() (int, bool) {
 	portAsString, isGiven := fetchEnv("PORT")
 
@@ -22,10 +23,10 @@ func (p Port) Source() (int, bool) {
 	return port, err == nil
 }
 
-//
-// 1025-65535
+// NoOpenPortFoundError the error what returned when no open port found
 var NoOpenPortFoundError = errors.New("no open port found")
 
+// RequestPortFromOperationSystem get a port from between 1025-65535
 func RequestPortFromOperationSystem() int {
 	l, err := net.Listen("tcp", ":0")
 	doWhatCanBeDoneWhenNoPortAvailableInAWebDevelopmentEnvironment(err)
@@ -45,7 +46,7 @@ func doWhatCanBeDoneWhenNoPortAvailableInAWebDevelopmentEnvironment(err error) {
 	}
 }
 
-func (p Port) FindOpenAsString() (port int) {
+func (p Port) FindOpen() (port int) {
 	restrictedPortFromUse, sourcePortIsGiven := p.Source()
 
 	for {
