@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/EscherAuth/escher"
   packages = ["config","keydb","request","signer","testing/env","utils","validator","validator/mock"]
-  revision = "08fe0ee7f811b29f3c73cb8e213c8c1c91a232c7"
+  revision = "487c3e6ed0cba898a2a0f077627ee2e44ff74376"
 
 [[projects]]
   name = "github.com/PuerkitoBio/purell"
@@ -33,7 +33,7 @@
 
 [[projects]]
   name = "github.com/stretchr/testify"
-  packages = ["assert"]
+  packages = ["assert","require"]
   revision = "69483b4bd14f5845b5a1e55bca19e954e827f1d0"
   version = "v1.1.4"
 
@@ -52,6 +52,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "140e05b54e47298febd591f2d3b272ba043e3d4fc7ab2fe026815a9a958a358b"
+  inputs-digest = "62a6e0f0208eb45a7be6f230d9e1d67d2ae16a510f5a42083b6ed81a1a9f45d9"
   solver-name = "gps-cdcl"
   solver-version = 1

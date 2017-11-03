@@ -1,6 +1,7 @@
 package reverseproxy
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -18,6 +19,10 @@ func (rp *reverseProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	apiKey, err := rp.validator.Validate(escherRequest, rp.keyDB, nil)
+
+	fmt.Println(r)
+	fmt.Println(escherRequest)
+	fmt.Println(err)
 
 	if err != nil {
 		w.Header().Set("WWW-Authenticate", "EscherAuth")

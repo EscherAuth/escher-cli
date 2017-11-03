@@ -5,6 +5,7 @@ type Environment struct {
 	Port  Port
 
 	envDifferencesForSubProcess EnvDiff
+	forwardProxyAddr            string
 }
 
 func New() *Environment {
