@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httputil"
+	"os"
 	"time"
 
 	"github.com/EscherAuth/escher/request"
@@ -15,10 +16,12 @@ func New(eSigner signer.Signer) *httputil.ReverseProxy {
 }
 
 func d(req *http.Request) {
-	fmt.Println("---------------")
-	bs, _ := httputil.DumpRequest(req, false)
-	fmt.Println(string(bs))
-	fmt.Println("- - - - - - - -")
+	if os.Getenv("ESCHER_DEBUG") == "true" {
+		fmt.Println("---------------")
+		bs, _ := httputil.DumpRequest(req, false)
+		fmt.Println(string(bs))
+		fmt.Println("- - - - - - - -")
+	}
 }
 func newDirector(eSigner signer.Signer) func(req *http.Request) {
 	return func(req *http.Request) {

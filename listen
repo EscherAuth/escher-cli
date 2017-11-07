@@ -1,1 +1,2 @@
+source env.sh
 go build && env PORT=8080 ./escher-cli ./test_web $PORT

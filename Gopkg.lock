@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/EscherAuth/escher"
   packages = ["config","keydb","request","signer","testing/env","utils","validator","validator/mock"]
-  revision = "487c3e6ed0cba898a2a0f077627ee2e44ff74376"
+  revision = "16d4c06892428e82c4c8f9fbaf6cb3b59b13d755"
 
 [[projects]]
   name = "github.com/PuerkitoBio/purell"
