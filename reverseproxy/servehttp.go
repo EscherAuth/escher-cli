@@ -20,16 +20,14 @@ func (rp *reverseProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	apiKey, err := rp.validator.Validate(escherRequest, rp.keyDB, nil)
 
-	fmt.Println(err)
-
 	if err != nil {
+		fmt.Println(err)
 		w.Header().Set("WWW-Authenticate", "EscherAuth")
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
 
 	r.Header.Set("X-Escher-Key", apiKey)
-
 	rp.reverseProxy.ServeHTTP(w, r)
 
 }

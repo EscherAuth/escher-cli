@@ -1,1 +1,1 @@
-go build && env ESCHER_ACCESS_KEY_ID="a_b_v1" ESCHER_API_SECRET="sickrat" ./escher-cli curl -v localhost:8080
+go build && env ESCHER_ACCESS_KEY_ID="a_b_v1" ESCHER_API_SECRET="sickrat" ./escher-cli curl localhost:8080 $@
