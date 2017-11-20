@@ -31,6 +31,10 @@ func init() {
 
 	if err != nil {
 		log.Fatal(err)
+		log.Fatal(err)
+		log.Fatal(err)
+		log.Fatal(err)
+		log.Fatal(err)
 	}
 
 	backendServerPort = openPortNumber
