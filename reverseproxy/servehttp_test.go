@@ -1,16 +1,17 @@
 package reverseproxy_test
 
 import (
-	"time"
 	"bytes"
 	"context"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/EscherAuth/escher-cli/environment"
 	"github.com/EscherAuth/escher-cli/reverseproxy"
@@ -33,9 +34,6 @@ func init() {
 	}
 
 	backendServerPort = openPortNumber
-
-
-
 
 }
 
@@ -120,7 +118,7 @@ func backendServerIsListeningWith(t testing.TB, port int, handleFunc func(http.R
 
 	server := &http.Server{Addr: ":" + strconv.Itoa(port), Handler: mux}
 
-	time.Sleep(500 * time.Millisecond)
+	WaitForPortToBeOpen(port)
 
 	go server.ListenAndServe()
 
@@ -130,5 +128,34 @@ func backendServerIsListeningWith(t testing.TB, port int, handleFunc func(http.R
 		if err != nil {
 			t.Fatal(err)
 		}
+	}
+}
+
+// Check if a port is available
+func Check(port int) bool {
+
+	// Concatenate a colon and the port
+	host := ":" + strconv.Itoa(port)
+
+	// Try to create a server with the port
+	server, err := net.Listen("tcp", host)
+
+	// if it fails then the port is likely taken
+	if err != nil {
+		return false
+	}
+
+	// close the server
+	server.Close()
+
+	// we successfully used and closed the port
+	// so it's now available to be used again
+	return true
+
+}
+
+func WaitForPortToBeOpen(port int) {
+	for !Check(port) {
+		time.Sleep(500 * time.Millisecond)
 	}
 }
