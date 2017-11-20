@@ -147,6 +147,7 @@ func Check(port int) bool {
 
 	// close the server
 	server.Close()
+	time.Sleep(500 * time.Millisecond)
 
 	// we successfully used and closed the port
 	// so it's now available to be used again
