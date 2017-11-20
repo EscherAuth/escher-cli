@@ -1,6 +1,7 @@
 package reverseproxy_test
 
 import (
+	"time"
 	"bytes"
 	"context"
 	"fmt"
@@ -32,6 +33,9 @@ func init() {
 	}
 
 	backendServerPort = openPortNumber
+
+
+
 
 }
 
@@ -115,6 +119,9 @@ func backendServerIsListeningWith(t testing.TB, port int, handleFunc func(http.R
 	mux.HandleFunc("/", handleFunc)
 
 	server := &http.Server{Addr: ":" + strconv.Itoa(port), Handler: mux}
+
+	time.Sleep(500 * time.Millisecond)
+
 	go server.ListenAndServe()
 
 	return func() {
