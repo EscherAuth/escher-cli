@@ -118,28 +118,21 @@ func backendServerIsListeningWith(t testing.TB, port int, handleFunc func(http.R
 
 	server := &http.Server{Addr: ":" + strconv.Itoa(port), Handler: mux}
 
-	WaitForPortToBeOpen(port)
-
+	WaitForPortToBe(true, port)
 	go server.ListenAndServe()
+	WaitForPortToBe(false, port)
 
 	return func() {
 		err := server.Shutdown(context.Background())
 
 		if err != nil {
-			log.Println(err)
-			log.Println(err)
-			log.Println(err)
-			log.Println(err)
-			log.Println(err)
-			log.Println(err)
-			log.Println(err)
 			t.Fatal(err)
 		}
 	}
 }
 
 // Check if a port is available
-func Check(port int) bool {
+func isPortOpen(port int) bool {
 
 	// Concatenate a colon and the port
 	host := ":" + strconv.Itoa(port)
@@ -154,7 +147,6 @@ func Check(port int) bool {
 
 	// close the server
 	server.Close()
-	time.Sleep(1 * time.Second)
 
 	// we successfully used and closed the port
 	// so it's now available to be used again
@@ -162,8 +154,8 @@ func Check(port int) bool {
 
 }
 
-func WaitForPortToBeOpen(port int) {
-	for !Check(port) {
-		time.Sleep(500 * time.Millisecond)
+func WaitForPortToBe(isOpen bool, port int) {
+	for isPortOpen(port) != isOpen {
+		time.Sleep(200 * time.Millisecond)
 	}
 }
