@@ -126,6 +126,13 @@ func backendServerIsListeningWith(t testing.TB, port int, handleFunc func(http.R
 		err := server.Shutdown(context.Background())
 
 		if err != nil {
+			log.Println(err)
+			log.Println(err)
+			log.Println(err)
+			log.Println(err)
+			log.Println(err)
+			log.Println(err)
+			log.Println(err)
 			t.Fatal(err)
 		}
 	}
