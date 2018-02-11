@@ -1,1 +1,1 @@
-bundle exec rackup -p 4004
+bundle exec rackup -p $PORT

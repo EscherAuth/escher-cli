@@ -1,1 +1,4 @@
-go build && env PORT=8080 ./escher-cli ./test_web $PORT
+
+go build
+go build -o service ./test_service/go/main.go
+env PORT=8080 ./escher-cli ./service
