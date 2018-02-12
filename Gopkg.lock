@@ -4,8 +4,18 @@
 [[projects]]
   branch = "master"
   name = "github.com/EscherAuth/escher"
-  packages = ["config","keydb","request","signer","testing/env","utils","validator","validator/mock"]
-  revision = "16d4c06892428e82c4c8f9fbaf6cb3b59b13d755"
+  packages = [
+    "config",
+    "debug",
+    "keydb",
+    "request",
+    "signer",
+    "testing/env",
+    "utils",
+    "validator",
+    "validator/mock"
+  ]
+  revision = "c12d41274a788b96f94d4eb2ec88a4c4cd5547c2"
 
 [[projects]]
   name = "github.com/PuerkitoBio/purell"
@@ -33,7 +43,10 @@
 
 [[projects]]
   name = "github.com/stretchr/testify"
-  packages = ["assert","require"]
+  packages = [
+    "assert",
+    "require"
+  ]
   revision = "69483b4bd14f5845b5a1e55bca19e954e827f1d0"
   version = "v1.1.4"
 
@@ -46,7 +59,18 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
-  packages = ["internal/gen","internal/triegen","internal/ucd","secure/bidirule","transform","unicode/bidi","unicode/cldr","unicode/norm","unicode/rangetable","width"]
+  packages = [
+    "internal/gen",
+    "internal/triegen",
+    "internal/ucd",
+    "secure/bidirule",
+    "transform",
+    "unicode/bidi",
+    "unicode/cldr",
+    "unicode/norm",
+    "unicode/rangetable",
+    "width"
+  ]
   revision = "836efe42bb4aa16aaa17b9c155d8813d336ed720"
 
 [solve-meta]
