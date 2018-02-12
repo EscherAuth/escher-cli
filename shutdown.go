@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"time"
 )
 
 func WaitForShutdown(cmd *exec.Cmd, shutdownSignals chan os.Signal) {
@@ -17,7 +18,8 @@ waitCycle:
 			if err != nil {
 				log.Println(err)
 			}
-		default:
+
+		case <-time.After(500 * time.Millisecond):
 
 			if cmd.Process == nil {
 				continue waitCycle
